@@ -1,0 +1,62 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles-home.css" />
+    <title>Library</title>
+  </head>
+  <body>
+    <div class="page-container">
+      {{> heading}}
+      <div class="user-cont">
+        <h3>Hello, {{data.username}}</h3>
+        <form action="/submit" method="post">
+          <ul>
+            {{#each data.books.unavailable}}
+              <li>
+                <input type="checkbox" id="{{this.title}}" name="items" value="{{this.title}}" onchange="checkSelectedBooks()" />
+                <label for="{{this.title}}">{{this.title}}</label>
+              </li>
+            {{/each}}
+          </ul>
+          <button type="submit" name="button" value="Return" disabled>Return</button>
+        </form>
+      </div>
+      <div class="content-cont">
+        <h2>Available Books</h2>
+        <form action="/submit" method="post">
+          <ul>
+            {{#each data.books.available}}
+              <li>
+                <input type="checkbox" id="{{this.title}}" name="items" value="{{this.title}}" onchange="checkSelectedBooks()" />
+                <label for="{{this.title}}">{{this.title}}</label>
+              </li>
+            {{/each}}
+          </ul>
+          <button type="submit" name="button" value="Borrow" disabled>Borrow</button>
+        </form>
+      </div>
+      <div class="signout-cont">
+        <form action="/signout" method="post">
+          <button type="submit">Sign Out</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function checkSelectedBooks() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        var borrowButton = document.querySelector('button[name="button"][value="Borrow"]');
+        var returnButton = document.querySelector('button[name="button"][value="Return"]');
+
+        var anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+
+        borrowButton.disabled = !anyChecked;
+        returnButton.disabled = !anyChecked;
+      }
+
+      window.addEventListener("load", checkSelectedBooks);
+    </script>
+  </body>
+</html>
